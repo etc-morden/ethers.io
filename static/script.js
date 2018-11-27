@@ -1011,8 +1011,7 @@
                         progressController.populate('blurb', 'Decrypting your account. Please wait.');
 
                         ethers.Wallet.fromEncryptedJson(json, password, progressController.updateProgress).then(function(account) {
-                            wallet = account;
-                            wallet.provider = provider;
+                            wallet = account.connect(provider);
                             self.emit('didUnlock');
                             setTimeout(function() {
                                 resolve();
