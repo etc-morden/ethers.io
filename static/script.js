@@ -875,6 +875,10 @@
             case 'custom-rpc.ethers.local':
                 network = 'test';
                 break;
+            case "etc-morden.github.io":
+            case "etc-morden.github.local":
+                network = "classicTestnet";
+                break;
             default:
                 break;
         };
@@ -1006,7 +1010,7 @@
                         progressController.populate('title', 'Decrypting Account');
                         progressController.populate('blurb', 'Decrypting your account. Please wait.');
 
-                        ethers.Wallet.fromEncryptedWallet(json, password, progressController.updateProgress).then(function(account) {
+                        ethers.Wallet.fromEncryptedJson(json, password, progressController.updateProgress).then(function(account) {
                             wallet = account;
                             wallet.provider = provider;
                             self.emit('didUnlock');
@@ -1756,7 +1760,8 @@
                             this.enabled = dragging;
                         };
                         controller.ondrop = function(contents) {
-                            if (!ethers.Wallet.isEncryptedWallet(contents)) {
+                            const address = ethers.utils.getJsonWalletAddress(contents);
+                            if (address === null) {
                                 this.enabled = false;
                                 return;
                             }
@@ -1771,7 +1776,7 @@
                                 password = normalizePassword(password);
                                 var progressController = navigation.pushProgress();
                                 progressController.populate('title', 'Enter JSON Account Password');
-                                ethers.Wallet.fromEncryptedWallet(contents, password, progressController.updateProgress).then(function(account) {
+                                ethers.Wallet.fromEncryptedJson(contents, password, progressController.updateProgress).then(function(account) {
                                     return timer(500, account);
                                 }).then(function(account) {
                                     return done(contents, resolve, 'imported');

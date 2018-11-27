@@ -1,8 +1,9 @@
 'use strict';
 
-var Contract = require('ethers/contracts/contract');
-var providers = require('ethers/providers');
-var utils = require('ethers/utils');
+const ethersLib = require('ethers');
+const Contract  = ethersLib.Contract;
+const providers = ethersLib.providers;
+const utils     = ethersLib.utils;
 
 var ProviderBridge = require('ethers-web3-bridge');
 
@@ -41,7 +42,7 @@ function proxyObject(object, deferProperties, chainProperties, syncProperties) {
     });
 
     deferProperties.forEach(function(property) {
-        utils.defineProperty(object, property, function() {
+        utils.defineReadOnly(object, property, function() {
             var targetArgs = Array.prototype.slice.call(arguments);
             return proxyPromise.then(function(proxyTarget) {
                 return proxyTarget[property].apply(proxyTarget, targetArgs);
@@ -50,7 +51,7 @@ function proxyObject(object, deferProperties, chainProperties, syncProperties) {
     });
 
     chainProperties.forEach(function(property) {
-        utils.defineProperty(object, property, function() {
+        utils.defineReadOnly(object, property, function() {
             var targetArgs = Array.prototype.slice.call(arguments);
             proxyPromise.then(function(proxyTarget) {
                 proxyTarget[property].apply(proxyTarget, targetArgs);
@@ -69,7 +70,7 @@ function proxyObject(object, deferProperties, chainProperties, syncProperties) {
         });
     });
 
-    utils.defineProperty(object, 'ready', function() {
+    utils.defineReadOnly(object, 'ready', function() {
         return proxyPromise.then(function(proxyTarget) {
             return null;
         });
@@ -112,7 +113,7 @@ var setProviderProxyTarget = proxyObject(provider, [
 
 function Signer() { }
 var signer = new Signer();
-utils.defineProperty(signer, 'provider', provider);
+utils.defineReadOnly(signer, 'provider', provider);
 var setSignerProxyTarget = proxyObject(signer, [
     'getAddress',
     'getBalance',
@@ -124,14 +125,14 @@ var setSignerProxyTarget = proxyObject(signer, [
 
 var ethers = {}
 
-utils.defineProperty(ethers, 'provider', provider);
-utils.defineProperty(ethers, 'signer', signer);
+utils.defineReadOnly(ethers, 'provider', provider);
+utils.defineReadOnly(ethers, 'signer', signer);
 
 var exportUtils = {};
-utils.defineProperty(ethers, 'utils', exportUtils);
+utils.defineReadOnly(ethers, 'utils', exportUtils);
 
 var blockchain = {};
-utils.defineProperty(ethers, 'blockchain', blockchain);
+utils.defineReadOnly(ethers, 'blockchain', blockchain);
 
 // onready - After we have finished loading and registered with ethers.io
 var onready = (function() {
@@ -163,39 +164,39 @@ defineCallback(ethers, 'onaccount');
 
 
 // ethers
-utils.defineProperty(ethers, 'getAddress', utils.getAddress);
+utils.defineReadOnly(ethers, 'getAddress', utils.getAddress);
 
-utils.defineProperty(ethers, 'formatEther', utils.formatEther);
-utils.defineProperty(ethers, 'parseEther', utils.parseEther);
+utils.defineReadOnly(ethers, 'formatEther', utils.formatEther);
+utils.defineReadOnly(ethers, 'parseEther', utils.parseEther);
 
-utils.defineProperty(ethers, 'formatUnits', utils.formatUnits);
-utils.defineProperty(ethers, 'parseUnits', utils.parseUnits);
+utils.defineReadOnly(ethers, 'formatUnits', utils.formatUnits);
+utils.defineReadOnly(ethers, 'parseUnits', utils.parseUnits);
 
-utils.defineProperty(ethers, 'etherSymbol', utils.etherSymbol);
+utils.defineReadOnly(ethers, 'etherSymbol', utils.etherSymbol);
 
 
 // ethers.utils
-utils.defineProperty(exportUtils, 'arrayify', utils.arrayify);
-utils.defineProperty(exportUtils, 'bigNumberify', utils.bigNumberify);
-utils.defineProperty(exportUtils, 'concat', utils.concat);
-utils.defineProperty(exportUtils, 'hexlify', utils.hexlify);
-utils.defineProperty(exportUtils, 'id', utils.id);
-utils.defineProperty(exportUtils, 'keccak256', utils.keccak256);
-utils.defineProperty(exportUtils, 'sha256', utils.sha256);
+utils.defineReadOnly(exportUtils, 'arrayify', utils.arrayify);
+utils.defineReadOnly(exportUtils, 'bigNumberify', utils.bigNumberify);
+utils.defineReadOnly(exportUtils, 'concat', utils.concat);
+utils.defineReadOnly(exportUtils, 'hexlify', utils.hexlify);
+utils.defineReadOnly(exportUtils, 'id', utils.id);
+utils.defineReadOnly(exportUtils, 'keccak256', utils.keccak256);
+utils.defineReadOnly(exportUtils, 'sha256', utils.sha256);
 
-utils.defineProperty(exportUtils, 'solidityKeccak256', utils.solidityKeccak256);
-utils.defineProperty(exportUtils, 'soliditySha256', utils.soliditySha256);
-utils.defineProperty(exportUtils, 'splitSignature', utils.splitSignature);
+utils.defineReadOnly(exportUtils, 'solidityKeccak256', utils.solidityKeccak256);
+utils.defineReadOnly(exportUtils, 'soliditySha256', utils.soliditySha256);
+utils.defineReadOnly(exportUtils, 'splitSignature', utils.splitSignature);
 
-utils.defineProperty(exportUtils, 'namehash', utils.namehash);
+utils.defineReadOnly(exportUtils, 'namehash', utils.namehash);
 
-utils.defineProperty(exportUtils, 'toUtf8Bytes', utils.toUtf8Bytes);
-utils.defineProperty(exportUtils, 'toUtf8String', utils.toUtf8String);
+utils.defineReadOnly(exportUtils, 'toUtf8Bytes', utils.toUtf8Bytes);
+utils.defineReadOnly(exportUtils, 'toUtf8String', utils.toUtf8String);
 
-utils.defineProperty(exportUtils, 'getContractAddress', utils.getContractAddress);
+utils.defineReadOnly(exportUtils, 'getContractAddress', utils.getContractAddress);
 
 
-utils.defineProperty(ethers, 'getContract', function(address, abi) {
+utils.defineReadOnly(ethers, 'getContract', function(address, abi) {
     if (arguments.length === 2) {
         return Promise.resolve(new Contract(address, abi, ethers.signer));
     }
@@ -232,21 +233,21 @@ utils.defineProperty(ethers, 'getContract', function(address, abi) {
 });
 
 
-utils.defineProperty(ethers, 'getAccount', function() {
+utils.defineReadOnly(ethers, 'getAccount', function() {
     return ethers.signer.getAddress();
 });
 
-utils.defineProperty(ethers, 'getNetwork', function() {
+utils.defineReadOnly(ethers, 'getNetwork', function() {
     return provider.ready().then(function() {
         return ethers.provider.name;
     });
 });
 
-utils.defineProperty(ethers, 'sendTransaction', function(tx) {
+utils.defineReadOnly(ethers, 'sendTransaction', function(tx) {
     return ethers.signer.sendTransaction(tx);
 });
 
-utils.defineProperty(ethers, 'send', function(addressOrName, amountWei) {
+utils.defineReadOnly(ethers, 'send', function(addressOrName, amountWei) {
     return ethers.signer.sendTransaction({
         to: addressOrName,
         value: amountWei
@@ -270,7 +271,7 @@ utils.defineProperty(ethers, 'send', function(addressOrName, amountWei) {
   'resolveName',
   'waitForTransaction'
 ].forEach(function(method) {
-    utils.defineProperty(blockchain, method, function() {
+    utils.defineReadOnly(blockchain, method, function() {
         var args = Array.prototype.slice.call(arguments);
         return ethers.provider[method].apply(ethers.provider, args);
     });
@@ -288,7 +289,7 @@ function Handler(parentUrl) {
     this.window = null;
 }
 
-utils.defineProperty(Handler.prototype, 'setupWindow', function(window) {
+utils.defineReadOnly(Handler.prototype, 'setupWindow', function(window) {
     if (this.window) { throw new Error('already has window'); }
 
     this.window = window;
@@ -350,7 +351,7 @@ utils.defineProperty(Handler.prototype, 'setupWindow', function(window) {
     this.pending = null;
 });
 
-utils.defineProperty(Handler.prototype, 'buildPayload', function(action, params) {
+utils.defineReadOnly(Handler.prototype, 'buildPayload', function(action, params) {
     return {
         action: action,
         ethers: 'v\x01\n',
@@ -359,7 +360,7 @@ utils.defineProperty(Handler.prototype, 'buildPayload', function(action, params)
     };
 });
 
-utils.defineProperty(Handler.prototype, 'sendMessage', function(action, params, callback) {
+utils.defineReadOnly(Handler.prototype, 'sendMessage', function(action, params, callback) {
 
     var payload = this.buildPayload(action, params);
     if (callback) {
@@ -377,10 +378,10 @@ utils.defineProperty(Handler.prototype, 'sendMessage', function(action, params, 
 
 
 function EthersSigner(handler) {
-    utils.defineProperty(this, '_handler', handler);
+    utils.defineReadOnly(this, '_handler', handler);
 }
 
-utils.defineProperty(EthersSigner.prototype, 'getAddress', function() {
+utils.defineReadOnly(EthersSigner.prototype, 'getAddress', function() {
     var self = this;
     return new Promise(function(resolve, reject) {
         self._handler.sendMessage('getAccount', { }, function(error, address) {
@@ -390,14 +391,14 @@ utils.defineProperty(EthersSigner.prototype, 'getAddress', function() {
     });
 });
 
-utils.defineProperty(EthersSigner.prototype, 'getBalance', function(blockTag) {
+utils.defineReadOnly(EthersSigner.prototype, 'getBalance', function(blockTag) {
     var self = this;
     return this.getAddress().then(function(address) {
         return ethers.provider.getBalance(address);
     });
 });
 
-utils.defineProperty(EthersSigner.prototype, 'sendTransaction', function(tx) {
+utils.defineReadOnly(EthersSigner.prototype, 'sendTransaction', function(tx) {
     var hexTx = {};
     for (var key in tx) {
         if (tx[key] == null) { continue; }
@@ -413,7 +414,7 @@ utils.defineProperty(EthersSigner.prototype, 'sendTransaction', function(tx) {
     });
 });
 
-utils.defineProperty(EthersSigner.prototype, 'signMessage', function(message) {
+utils.defineReadOnly(EthersSigner.prototype, 'signMessage', function(message) {
     var self = this;
     return new Promise(function(resolve, reject) {
         self._handler.sendMessage('signMessage', { message: message }, function(error, signature) {
@@ -456,12 +457,12 @@ function connectEthers(window) {
                     chainId: 43
                 }));
             } else {
-                setProviderProxyTarget(providers.getDefaultProvider(network));
+                setProviderProxyTarget(ethersLib.getDefaultProvider(network));
             }
             setSignerProxyTarget(new EthersSigner(handler));
 
             // @TODO: Make this available as a proxy?
-            utils.defineProperty(ethers, 'loadApplication', function(url) {
+            utils.defineReadOnly(ethers, 'loadApplication', function(url) {
                 return new Promise(function(resolve, reject) {
                     handler.sendMessage('loadApplication', { url: url }, function(error) {
                         if (error) { return reject(error); }
@@ -525,14 +526,14 @@ function inject(window) {
         // No Ethers, MetaMask, Mist or anything else... Create a generic provider (no signer)
         } else {
             ethersLog('Connected Default Provider: network=' + network);
-            setProviderProxyTarget(providers.getDefaultProvider(network));
+            setProviderProxyTarget(ethersLib.getDefaultProvider(network));
 
             // No private keys to sign with
             var zeroSigner = new Signer();
-            utils.defineProperty(zeroSigner, 'getAddress', function() { return Promise.resolve(null); });
-            utils.defineProperty(zeroSigner, 'getBalance', function() { return Promise.reject(new Error('no signer')); });
-            utils.defineProperty(zeroSigner, 'sendTransaction', function() { return Promise.reject(new Error('no signer')); });
-            utils.defineProperty(zeroSigner, 'signMessage', function() { return Promise.reject(new Error('no signer')); });
+            utils.defineReadOnly(zeroSigner, 'getAddress', function() { return Promise.resolve(null); });
+            utils.defineReadOnly(zeroSigner, 'getBalance', function() { return Promise.reject(new Error('no signer')); });
+            utils.defineReadOnly(zeroSigner, 'sendTransaction', function() { return Promise.reject(new Error('no signer')); });
+            utils.defineReadOnly(zeroSigner, 'signMessage', function() { return Promise.reject(new Error('no signer')); });
             setSignerProxyTarget(zeroSigner);
 
             providerBridge.connectEthers(provider);
