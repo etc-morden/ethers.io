@@ -196,7 +196,7 @@
     })();
 
     function getGasPrices() {
-        var gasPriceUrl = '/gas-prices-v2.raw';
+        var gasPriceUrl = 'gas-prices-v2.raw';
         var gasPriceSigner = '0xcf49182a885E87fD55f4215def0f56EC71bB7511';
         return new Promise(function(resolve, reject) {
             var request = new XMLHttpRequest();
