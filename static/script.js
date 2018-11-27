@@ -929,7 +929,7 @@
             ethersLog('Connected JSON-RPC Provider: url=' + network + ', chainId=' + provider.chainId);
         })();
     } else {
-        provider = ethers.providers.getDefaultProvider(network);
+        provider = ethers.getDefaultProvider(network);
         ethersLog('Connected Provider: network=' + provider.name + ', chainId=' + provider.chainId);
     }
 
