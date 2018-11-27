@@ -205,7 +205,7 @@
             request.onload = function() {
                 if (request.status >= 200 && request.status < 400) {
                     var data = request.responseText.trim();
-                    var tx = ethers.Wallet.parseTransaction(data);
+                    var tx = ethers.utils.parseTransaction(data);
                     if (tx.from !== gasPriceSigner) {
                         reject(new Error('invalid gas price signer'));
                     } else {
