@@ -1,7 +1,7 @@
 (function(window) {
     var ethers = window.ethers;
 
-    var defaultUrl = 'https://welcome.ethers.space/';
+    var defaultUrl = 'https://etc-testnet-welcome.github.io/welcome/';
     var walletUrl = 'https://ethers-wallet.github.io/wallet/';
 
     //var defaultUrl = 'http://localhost:8081';
