@@ -950,11 +950,11 @@
         var gasLimitTiers = [ 21000, 75000, 150000, 250000, 500000, 750000, 1500000 ];
 
         // Get the required parameters for sending a transaction
-        function getTransactionInfo(tx) {
+        function getTransactionInfo(tx, from) {
             return Promise.all([
                 (tx.to ? provider.getCode(tx.to): Promise.resolve('INVALID')),
                 provider.estimateGas(tx),
-                provider.getTransactionCount(tx.from),
+                provider.getTransactionCount(from),
                 getGasPrices(),
             ]).then(function(result) {
                 var gasLimit = 21000;
@@ -1048,7 +1048,7 @@
 
                 tx = {
                     // The sender
-                    from: this.address,
+                    // from: this.address,
 
                     // From the transaction
                     to: tx.to,
@@ -1060,7 +1060,7 @@
                     gasLimit: 1500000,
                 };
 
-                var transactionInfo = getTransactionInfo(tx);
+                var transactionInfo = getTransactionInfo(tx, this.address);
 
                 var seq = Promise.resolve();
 
@@ -1121,7 +1121,7 @@
                             tx.gasPrice = price;
                         }
 
-                        tx.nonce = result.nonce;
+                        // tx.nonce = result.nonce;
                         if (!tx.to) {
                             controller.populate('address', ethers.utils.getContractAddress(tx));
                         }
