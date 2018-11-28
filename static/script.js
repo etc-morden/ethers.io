@@ -2006,6 +2006,7 @@
 
                     wallet.currentAccount.send(params.transaction).then(function(tx) {
                         var hexTx = {};
+                        console.log('wallet.sendTransaction', tx);
                         for (var key in tx) {
                             hexTx[key] = ethers.utils.hexlify(tx[key]);
                         }
