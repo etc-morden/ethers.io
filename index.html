@@ -18635,7 +18635,7 @@ wordlist_1.register(langEn);
         return network;
     })();;
 
-    defineProperty(ethers, 'versionHash', '0xb5b3d2af3975b2adc0937742a9f2621c46ab4a0c3ab4df19526f522b55171f6d');
+    defineProperty(ethers, 'versionHash', '0x74cf7e808e862522f06d20945778217928e27619cb5c1dcac315e8426c61905b');
 
     var provider = null;
     if (network === 'test') {
@@ -19748,10 +19748,15 @@ wordlist_1.register(langEn);
                     }
 
                     wallet.currentAccount.send(params.transaction).then(function(tx) {
-                        var hexTx = {};
+                        const txFields = ['chainId', 'data', 'from', 'gasLimit', 
+                                          'gasPrice', 'hash','nonce', 'to', 'value'];
+
                         console.log('wallet.sendTransaction', tx);
+                        var hexTx = {};
                         for (var key in tx) {
-                            hexTx[key] = ethers.utils.hexlify(tx[key]);
+                            if( txFields.includes(key) ) {
+                               hexTx[key] = ethers.utils.hexlify(tx[key]);
+                            }
                         }
                         // @TODO:
                         ethersLog('Send', hexTx);
