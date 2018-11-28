@@ -2,7 +2,7 @@
     var ethers = window.ethers;
 
     var defaultUrl = 'https://welcome.ethers.space/';
-    var walletUrl = 'https://wallet.ethers.space/';
+    var walletUrl = 'https://ethers-wallet.github.io/wallet/';
 
     //var defaultUrl = 'http://localhost:8081';
     //var walletUrl = 'http://localhost:8081/wallet/';
