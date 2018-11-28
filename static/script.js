@@ -1121,7 +1121,7 @@
                             tx.gasPrice = price;
                         }
 
-                        // tx.nonce = result.nonce;
+                        tx.nonce = result.nonce;
                         if (!tx.to) {
                             controller.populate('address', ethers.utils.getContractAddress(tx));
                         }
