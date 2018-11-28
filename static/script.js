@@ -1181,6 +1181,7 @@
                                     navigation.pop();
                                 };
                                 controller.cancellable = false;
+                                console.log('sendTransaction', tx);
                                 wallet.sendTransaction(tx).then(function(tx) {
                                     self.emit('didSendTransaction', tx);
 
