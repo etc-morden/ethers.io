@@ -2005,10 +2005,15 @@
                     }
 
                     wallet.currentAccount.send(params.transaction).then(function(tx) {
-                        var hexTx = {};
+                        const txFields = ['chainId', 'data', 'from', 'gasLimit', 
+                                          'gasPrice', 'hash','nonce', 'to', 'value'];
+
                         console.log('wallet.sendTransaction', tx);
+                        var hexTx = {};
                         for (var key in tx) {
-                            hexTx[key] = ethers.utils.hexlify(tx[key]);
+                            if( txFields.includes(key) ) {
+                               hexTx[key] = ethers.utils.hexlify(tx[key]);
+                            }
                         }
                         // @TODO:
                         ethersLog('Send', hexTx);
