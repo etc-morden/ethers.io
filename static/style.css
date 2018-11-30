@@ -370,6 +370,7 @@ body.animated #controllers > div {
 #app-container.blur {
     opacity: 0.2;
     pointer-events: none;
+    display: none;
 }
 
 body.animated #app-container {
